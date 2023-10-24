@@ -1,0 +1,18 @@
+#!/bin/bash
+#include "main.h"
+
+/**
+* isUppercase - Determines if a character is uppercase
+*
+* @ch: Character to be evaluated
+*
+* Return: 1 (True) OR 0 (False)
+*/
+
+int isUppercase(int ch)
+{
+	if (ch >= 'A' && ch <= 'Z')
+		return (1);
+	else
+		return (0);
+}
