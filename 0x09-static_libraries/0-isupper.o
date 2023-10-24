@@ -1,18 +1,14 @@
-#!/bin/bash
 #include "main.h"
 
 /**
-* isUppercase - Determines if a character is uppercase
-*
-* @ch: Character to be evaluated
-*
-* Return: 1 (True) OR 0 (False)
-*/
-
-int isUppercase(int ch)
+ * _isupper - This a function that checks for uppercase characters
+ * @c: int type numbeir
+ * Return: 1 if uppercase, else 0
+ */
+int _isupper(int c)
 {
-	if (ch >= 'A' && ch <= 'Z')
+	if (c > 64 && c < 91)
 		return (1);
-	else
-		return (0);
+
+	return (0);
 }
