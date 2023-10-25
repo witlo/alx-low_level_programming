@@ -1,24 +1,24 @@
 #include "main.h"
 
-int string_to_int(char *str);
-int multiply_values(int val1, int val2);
-void output_number(int num);
+int string_to_integer(char *str);
+int product_of_two_integers(int int1, int int2);
+void display_number(int num);
 
 /**
-* main - Starting point of the application
+* main - Initial function
 *
-* @argc: Number of items in @argv
+* @argc: Count of @argv elements
 *
-* @argv: An array of string arguments passed to the program
+* @argv: Array containing program command line arguments
 *
-* Return: 0, if execution is successful
+* Return: 0, indicating successful execution
 */
 
 int main(int argc, char *argv[])
 {
 	if (argc == 3)
 	{
-		output_number(multiply_values(string_to_int(argv[1]), string_to_int(argv[2])));
+		display_number(product_of_two_integers(string_to_integer(argv[1]), string_to_integer(argv[2])));
 		_putchar('\n');
 		return (0);
 	}
@@ -30,77 +30,72 @@ int main(int argc, char *argv[])
 		_putchar('o');
 		_putchar('r');
 		_putchar('\n');
-		return (0);
+		return (1);
 	}
 }
 
 /**
-* string_to_int - Transforms a string representing a number to its integer value
+* string_to_integer - Converts a string to an integer
 *
-* @str: The input string
+* @str: Input string to be converted
 *
-* Return: Corresponding integer OR (0) if none
+* Return: Integer result of conversion
 */
 
-int string_to_int(char *str)
+int string_to_integer(char *str)
 {
-	int sign_flag = 1;
-	int output = 0;
+	int sign = 1;
+	int total = 0;
 
-	while (*str != '\0')
+	while (*str)
 	{
 		if (*str == '-')
-			sign_flag *= -1;
+			sign *= -1;
 		else if (*str >= '0' && *str <= '9')
-			output = (output * 10) + (*str - '0');
-		else if (output)
+			total = (total * 10) + (*str - '0');
+		else if (total)
 			break;
 
 		str++;
 	}
 
-	return (output * sign_flag);
+	return (total * sign);
 }
 
 /**
-* multiply_values - Computes the product of two numbers
+* product_of_two_integers - Calculates the product of two integers
 *
-* @val1: First input value
+* @int1: First integer
 *
-* @val2: Second input value
+* @int2: Second integer
 *
-* Return: The product of val1 and val2
+* Return: Product of int1 and int2
 */
 
-int multiply_values(int val1, int val2)
+int product_of_two_integers(int int1, int int2)
 {
-	return (val1 * val2);
+	return (int1 * int2);
 }
 
 /**
-* output_number - Displays a number as characters
+* display_number - Outputs a number to the standard output
 *
-* @num: Input integer
+* @num: Integer to be displayed
 *
 * Return: None
 */
 
-void output_number(int num)
+void display_number(int num)
 {
-	unsigned int temp_num;
+	unsigned int num_abs;
 
-	temp_num = num;
+	num_abs = (num < 0) ? -num : num;
 
 	if (num < 0)
-	{
 		_putchar('-');
-		temp_num = -num;
-	}
 
-	if (temp_num / 10 != 0)
-	{
-		output_number(temp_num / 10);
-	}
+	if (num_abs / 10)
+		display_number(num_abs / 10);
 
-	_putchar((temp_num % 10) + '0');
+	_putchar((num_abs % 10) + '0');
 }
