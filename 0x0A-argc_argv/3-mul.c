@@ -1,15 +1,15 @@
 #include "main.h"
 
 int string_to_integer(char *str);
-int product_of_two_integers(int int1, int int2);
-void display_number(int num);
+int product_of_two_numbers(int number1, int number2);
+void display_number(int number);
 
 /**
-* main - Initial function
+* main - Starting point of the program
 *
-* @argc: Count of @argv elements
+* @argc: Count of command line arguments
 *
-* @argv: Array containing program command line arguments
+* @argv: Array containing the command line arguments
 *
 * Return: 0, indicating successful execution
 */
@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 {
 	if (argc == 3)
 	{
-		display_number(product_of_two_integers(string_to_integer(argv[1]), string_to_integer(argv[2])));
+		display_number(product_of_two_numbers(string_to_integer(argv[1]), string_to_integer(argv[2])));
 		_putchar('\n');
 		return (0);
 	}
@@ -35,11 +35,11 @@ int main(int argc, char *argv[])
 }
 
 /**
-* string_to_integer - Converts a string to an integer
+* string_to_integer - Transforms a string to an integer
 *
-* @str: Input string to be converted
+* @str: String to be transformed
 *
-* Return: Integer result of conversion
+* Return: The integer equivalent of the string
 */
 
 int string_to_integer(char *str)
@@ -63,39 +63,39 @@ int string_to_integer(char *str)
 }
 
 /**
-* product_of_two_integers - Calculates the product of two integers
+* product_of_two_numbers - Calculates the product of two integers
 *
-* @int1: First integer
+* @number1: First integer
 *
-* @int2: Second integer
+* @number2: Second integer
 *
-* Return: Product of int1 and int2
+* Return: Product of number1 and number2
 */
 
-int product_of_two_integers(int int1, int int2)
+int product_of_two_numbers(int number1, int number2)
 {
-	return (int1 * int2);
+	return (number1 * number2);
 }
 
 /**
-* display_number - Outputs a number to the standard output
+* display_number - Displays an integer to the standard output
 *
-* @num: Integer to be displayed
+* @number: Integer to be displayed
 *
 * Return: None
 */
 
-void display_number(int num)
+void display_number(int number)
 {
-	unsigned int num_abs;
+	unsigned int absolute_number;
 
-	num_abs = (num < 0) ? -num : num;
+	absolute_number = (number < 0) ? -number : number;
 
-	if (num < 0)
+	if (number < 0)
 		_putchar('-');
 
-	if (num_abs / 10)
-		display_number(num_abs / 10);
+	if (absolute_number / 10)
+		display_number(absolute_number / 10);
 
-	_putchar((num_abs % 10) + '0');
+	_putchar((absolute_number % 10) + '0');
 }
