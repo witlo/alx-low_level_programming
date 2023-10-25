@@ -1,45 +1,45 @@
 #include "main.h"
 
-void display_string_chars(char *string);
+void display_string_elements(char *txt);
 
 /**
-* main - Outputs all received arguments
+* main - Outputs each argument provided to the program
 *
-* @argc: Count of arguments, integer
+* @argc: Number of items in @argv, integer
 *
-* @argv: Array of string arguments passed to the program
+* @argv: An array of string arguments passed to the program
 *
-* Return: 0, indicates successful execution
+* Return: 0, if executed successfully
 */
 
 int main(int argc, char *argv[])
 {
-    int index;
+	int index;
 
-    for (index = 0; index < argc; index++)
-    {
-        display_string_chars(argv[index]);
-        _putchar('\n');
-    }
+	for (index = 0; index < argc; index++)
+	{
+		display_string_elements(argv[index]);
+		_putchar('\n');
+	}
 
-    return (0);
+	return (0);
 }
 
 /**
-* display_string_chars - Outputs each character in a string
+* display_string_elements - Outputs every character of a given string
 *
-* @string: Pointer to the string to be displayed
+* @txt: Pointer to the input string
 *
-* Return: void
+* Return: None
 */
 
-void display_string_chars(char *string)
+void display_string_elements(char *txt)
 {
-    int index = 0;
+	int j = 0;
 
-    while (string[index] != '\0')
-    {
-        _putchar(string[index]);
-        index++;
-    }
+	while (txt[j] != '\0')
+	{
+		_putchar(txt[j]);
+		j++;
+	}
 }
