@@ -3,10 +3,10 @@
 #include "main.h"
 
 /**
-* main - performs multiplication on two integer arguments
-* @argc: argument count
-* @argv: argument vector
-* Return: 0 if successful
+* main - perform multiplication on two numerical arguments
+* @argc: count of arguments
+* @argv: array of arguments
+* Return: 0 on success
 */
 int main(int argc, char *argv[])
 {
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
-	product = atol(argv[1]) *  atol(argv[2]);
+	product = atol(argv[1]) * atol(argv[2]);
 	printf("%lu\n", product);
 	return (0);
 }
