@@ -3,13 +3,14 @@
 #include "main.h"
 
 /**
-* main - perform multiplication on two numerical arguments
-* @argc: count of arguments
-* @argv: array of arguments
-* Return: 0 on success
+* main - calculate product of two numeric arguments
+* @argc: count of command-line arguments
+* @argv: command-line arguments
+* Return: 0 if successful
 */
 int main(int argc, char *argv[])
 {
+
 	unsigned long product;
 	int i, j;
 
