@@ -1,228 +1,181 @@
-#include "main.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-int measure_str(char *str);
-char *init_array(int size);
-char *skip_zeroes(char *str);
-void calc_product(char *prod, char *mult, int digit, int zeroes);
-void sum_nums(char *total_prod, char *new_prod, int new_len);
+void *alloc_zeroes(unsigned int n, unsigned int size);
+int check_digits(char *s);
+void print_str(char *s);
+void reverse_str(int start, int end, char *ns);
+int length_str(char *s);
+char *multiply_str(char *a, char *b);
 
 /**
- * measure_str - Calculate length of a string.
- * @str: String to be measured.
+ * alloc_zeroes - allocate and zero (`size' * `n') bytes
+ * @n: quantity of elements
+ * @size: bytes per element
  *
- * Return: Length of the string.
+ * Return: pointer to memory, or NULL if `n' or `size' is 0 or if malloc fails
  */
-int measure_str(char *str)
+void *alloc_zeroes(unsigned int n, unsigned int size)
 {
-	int len = 0;
+	unsigned int i;
+	char *ptr;
 
-	while (*str++)
-		len++;
-
-	return (len);
+	if (size == 0 || n == 0)
+		return (NULL);
+	ptr = malloc(n * size);
+	if (ptr == NULL)
+		return (NULL);
+	for (i = 0; i < n * size; ++i)
+		ptr[i] = 0;
+	return (ptr);
 }
 
 /**
- * init_array - Generate an array of chars initialized with
- *              'x' and ended with null byte.
- * @size: Size of the array to be initialized.
+ * check_digits - validate if string `s' is all digits
+ * @s: target string
  *
- * Description: Exits with status 98 if space is insufficient.
- * Return: Pointer to the array.
+ * Return: 1 if true, 0 if false
  */
-char *init_array(int size)
+int check_digits(char *s)
 {
-	char *array;
+	if (*s == '-' || *s == '+')
+		++s;
+	while (*s)
+	{
+		if (*s < '0' || *s > '9')
+		{
+			return (0);
+		}
+		++s;
+	}
+	return (1);
+}
+
+/**
+ * print_str - output string `s'
+ * @s: target string
+ */
+void print_str(char *s)
+{
+	while (*s)
+		putchar(*(s++));
+}
+
+/**
+ * reverse_str - reverse a numeric string without trailing zeroes
+ * @start: index to begin reversal
+ * @end: index to end reversal
+ * @ns: numeric string
+ */
+void reverse_str(int start, int end, char *ns)
+{
+	int i, j;
+	char tmp;
+
+	while (ns[end] == 0 && end != start)
+		--end;
+	for (i = start, j = end; i <= j; ++i, --j)
+	{
+		tmp = ns[i] + '0';
+		ns[i] = ns[j] + '0';
+		ns[j] = tmp;
+	}
+}
+
+/**
+ * length_str - calculate length of string `s'
+ * @s: target string
+ *
+ * Return: length of string
+ */
+int length_str(char *s)
+{
 	int i;
 
-	array = malloc(sizeof(char) * size);
-
-	if (array == NULL)
-		exit(98);
-
-	for (i = 0; i < (size - 1); i++)
-		array[i] = 'x';
-
-	array[i] = '\0';
-
-	return (array);
+	for (i = 0; s[i]; ++i)
+		;
+	return (i);
 }
 
 /**
- * skip_zeroes - Skip leading zeroes in a string of numbers.
- * @str: String to be iterated through.
+ * multiply_str - multiply two numeric strings
+ * @a: first number
+ * @b: second number
  *
- * Return: Pointer to the next non-zero element.
+ * Return: pointer to result on success, or NULL on failure
  */
-char *skip_zeroes(char *str)
+char *multiply_str(char *a, char *b)
 {
-	while (*str && *str == '0')
-		str++;
+	int la, lb, i, j, k, l, neg = 0;
+	char *result;
+	char mul, mul_carry, sum, sum_carry;
 
-	return (str);
-}
-
-/**
- * convert_digit - Change a digit character to its integer value.
- * @c: Character to be converted.
- *
- * Description: Exits with status 98 if c is not a digit.
- * Return: The integer value of c.
- */
-int convert_digit(char c)
-{
-	int digit = c - '0';
-
-	if (digit < 0 || digit > 9)
+	if (*a == '-')
 	{
-		printf("Error\n");
-		exit(98);
+		neg ^= 1;
+		++a;
 	}
-
-	return (digit);
-}
-
-/**
- * calc_product - Multiply a string of numbers by a single digit.
- * @prod: Buffer to store the result.
- * @mult: String of numbers to be multiplied.
- * @digit: Single digit multiplier.
- * @zeroes: Required number of leading zeroes.
- *
- * Description: Exits with status 98 if mult contains a non-digit.
- */
-void calc_product(char *prod, char *mult, int digit, int zeroes)
-{
-	int len_mult, num, tens = 0;
-
-	len_mult = measure_str(mult) - 1;
-	mult += len_mult;
-
-	while (*prod)
+	if (*b == '-')
 	{
-		*prod = 'x';
-		prod++;
+		neg ^= 1;
+		++b;
 	}
-
-	prod--;
-
-	while (zeroes--)
+	la = length_str(a);
+	lb = length_str(b);
+	result = alloc_zeroes(la + lb + 1 + neg, sizeof(char));
+	if (result == NULL)
+		return (NULL);
+	if (neg)
+		result[0] = '-';
+	for (i = lb - 1, l = neg; i >= 0; --i, ++l)
 	{
-		*prod = '0';
-		prod--;
-	}
-
-	for (; len_mult >= 0; len_mult--, mult--, prod--)
-	{
-		if (*mult < '0' || *mult > '9')
+		mul_carry = 0;
+		sum_carry = 0;
+		for (j = la - 1, k = l; j >= 0; --j, ++k)
 		{
-			printf("Error\n");
-			exit(98);
+			mul = (a[j] - '0') * (b[i] - '0') + mul_carry;
+			mul_carry = mul / 10;
+			mul %= 10;
+			sum = result[k] + mul + sum_carry;
+			sum_carry = sum / 10;
+			sum %= 10;
+			result[k] = sum;
 		}
-
-		num = (*mult - '0') * digit;
-		num += tens;
-		*prod = (num % 10) + '0';
-		tens = num / 10;
+		result[k] = sum_carry + mul_carry;
 	}
-
-	if (tens)
-		*prod = (tens % 10) + '0';
+	reverse_str(neg, k, result);
+	return (result);
 }
 
 /**
- * sum_nums - Add numbers in two strings.
- * @total_prod: Buffer containing the running total product.
- * @new_prod: New product to be added.
- * @new_len: Length of new_prod.
- */
-void sum_nums(char *total_prod, char *new_prod, int new_len)
-{
-	int num, tens = 0;
-
-	while (*(total_prod + 1))
-		total_prod++;
-
-	while (*(new_prod + 1))
-		new_prod++;
-
-	for (; *total_prod != 'x'; total_prod--)
-	{
-		num = (*total_prod - '0') + (*new_prod - '0');
-		num += tens;
-		*total_prod = (num % 10) + '0';
-		tens = num / 10;
-
-		new_prod--;
-		new_len--;
-	}
-
-	for (; new_len >= 0 && *new_prod != 'x'; new_len--)
-	{
-		num = (*new_prod - '0');
-		num += tens;
-		*total_prod = (num % 10) + '0';
-		tens = num / 10;
-
-		total_prod--;
-		new_prod--;
-	}
-
-	if (tens)
-		*total_prod = (tens % 10) + '0';
-}
-
-/**
- * main - Multiply two positive numbers.
- * @argc: Number of arguments passed to the program.
- * @argv: Array of pointers to the arguments.
+ * main - multiply two command line numbers and output result
+ * @argc: argument count
+ * @argv: argument list
  *
- * Description: Exits with status 98 if argument count is incorrect
- *              or if a number contains non-digits.
- * Return: 0 if successful.
+ * Return: 0 if success, 98 if error
  */
 int main(int argc, char *argv[])
 {
-	char *total_prod, *new_prod;
-	int size, i, digit, zeroes = 0;
+	char *result;
 
 	if (argc != 3)
 	{
-		printf("Error\n");
+		print_str("Error\n");
 		exit(98);
 	}
-
-	if (*(argv[1]) == '0')
-		argv[1] = skip_zeroes(argv[1]);
-	if (*(argv[2]) == '0')
-		argv[2] = skip_zeroes(argv[2]);
-	if (*(argv[1]) == '\0' || *(argv[2]) == '\0')
+	if (!check_digits(argv[1]) || !check_digits(argv[2]))
 	{
-		printf("0\n");
-		return (0);
+		print_str("Error\n");
+		exit(98);
 	}
-
-	size = measure_str(argv[1]) + measure_str(argv[2]);
-	total_prod = init_array(size + 1);
-	new_prod = init_array(size + 1);
-
-	for (i = measure_str(argv[2]) - 1; i >= 0; i--)
+	result = multiply_str(argv[1], argv[2]);
+	if (result == NULL)
 	{
-		digit = convert_digit(*(argv[2] + i));
-		calc_product(new_prod, argv[1], digit, zeroes++);
-		sum_nums(total_prod, new_prod, size - 1);
+		print_str("Error\n");
+		exit(98);
 	}
-	for (i = 0; total_prod[i]; i++)
-	{
-		if (total_prod[i] != 'x')
-			putchar(total_prod[i]);
-	}
+	print_str(result);
 	putchar('\n');
-
-	free(new_prod);
-	free(total_prod);
-
-	return (0);
+	free(result);
+	exit(EXIT_SUCCESS);
 }
