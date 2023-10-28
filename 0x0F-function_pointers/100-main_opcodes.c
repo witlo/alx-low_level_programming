@@ -25,8 +25,14 @@ int main(int argc, char *argv[])
 			exit(2);
 		}
 		for (index = 0; index < byte_count; index++)
-			printf("%02x%c",
-					(unsigned char)*((char *)function_ptr + index), index < byte_count - 1 ? ' ' : '\n');
+		{
+			printf("%02x",
+				   (unsigned char)*((char *)function_ptr + index));
+			if (index < byte_count - 1)
+				printf(" ");
+			else
+				printf("\n");
+		}
 	}
 	else
 	{
